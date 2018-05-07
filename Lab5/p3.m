@@ -34,7 +34,7 @@ Bval = double(subs(Bmat,[q; u; params_sym], [q0; u0; params_val]));
 Cval = double(subs(Cmat,[q; u; params_sym], [q0; u0; params_val]));
 Dval = double(subs(Dmat,[q; u; params_sym], [q0; u0; params_val]));
 
-syms vxk vyk wzk Xk Yk psik Fxk ∆k real
+syms vxk vyk wzk Xk Yk psik Fxk deltak real
 qk = [vxk; vyk; wzk; Xk; Yk; psik];
 uk = [Fxk; deltak];
 
