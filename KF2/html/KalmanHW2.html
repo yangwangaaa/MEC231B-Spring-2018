@@ -1,0 +1,674 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>KalmanHW2</title><meta name="generator" content="MATLAB 9.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-03-18"><meta name="DC.source" content="KalmanHW2.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">ME C231B Assignment: Kalman Filtering (part 2)</a></li><li><a href="#2">1.c.ii</a></li><li><a href="#3">1.c.iv</a></li><li><a href="#4">2</a></li><li><a href="#5">3. Steady-State Behavior</a></li><li><a href="#6">4. Separating signal from noise</a></li><li><a href="#7">4.b</a></li><li><a href="#8">Separating Signal from Noise</a></li><li><a href="#9">Sample Time</a></li><li><a href="#10">Create high-pass filter</a></li><li><a href="#11">Create low-pass filter</a></li><li><a href="#12">Bode plot of both</a></li><li><a href="#13">Form overall system which adds the outputs</a></li><li><a href="#14">Noise variance and initial condition variance</a></li><li><a href="#15">Run several iterations to get the steady-state Kalman Gains</a></li><li><a href="#16">Form Kalman filter with 3 outputs</a></li><li><a href="#17">Form matrix to extract estimate of y2_{k|k}</a></li><li><a href="#18">Bode plot of filter</a></li><li><a href="#19">Single Simulation</a></li><li><a href="#20">Get y1 and y2 (separate simulations) for later comparison</a></li><li><a href="#22">Form Estimate of y2</a></li><li><a href="#23">Plot</a></li><li><a href="#24">4.c</a></li><li><a href="#25">4.d</a></li><li><a href="#26">Create plant</a></li><li><a href="#27">Create/Declare variance of disturbance and initial condition</a></li><li><a href="#28">Initialize KF states with appropriate values</a></li><li><a href="#29">Create a specific initial condition and noise sequence</a></li><li><a href="#30">Simulate the system/KF one step at a time</a></li></ul></div><h2 id="1">ME C231B Assignment: Kalman Filtering (part 2)</h2><pre class="codeinput">close <span class="string">all</span>
+</pre><h2 id="2">1.c.ii</h2><pre class="codeinput">Amat = repmat(1,[1 1 20]);
+nX = size(Amat,1);
+Emat = repmat(0,[1 1 20]);
+Cmat = repmat(1,[1 1 20]);
+Fmat = repmat(1,[1 1 20]);
+sX = 1000; sW = 1; m0=2;
+<span class="keyword">for</span> k=1:6
+    [LkBatch,VkBatch,eVar] = <span class="keyword">...</span>
+        batchKF(Amat,Emat,Cmat,Fmat,sX,sW,k);
+    fprintf(<span class="string">'Horizon number is %d'</span>,k)
+    LkBatch(end-2*nX+1:end,:)
+    VkBatch(end-2*nX+1:end)
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">Horizon number is 1
+ans =
+
+    0.9990
+    0.9990
+
+
+ans =
+
+   1.0e-03 *
+
+    0.9990
+    0.9990
+
+Horizon number is 2
+ans =
+
+    0.4998    0.4998
+    0.4998    0.4998
+
+
+ans =
+
+   1.0e-03 *
+
+    0.4998
+    0.4998
+
+Horizon number is 3
+ans =
+
+    0.3332    0.3332    0.3332
+    0.3332    0.3332    0.3332
+
+
+ans =
+
+   1.0e-03 *
+
+    0.3332
+    0.3332
+
+Horizon number is 4
+ans =
+
+    0.2499    0.2499    0.2499    0.2499
+    0.2499    0.2499    0.2499    0.2499
+
+
+ans =
+
+   1.0e-03 *
+
+    0.2499
+    0.2499
+
+Horizon number is 5
+ans =
+
+    0.2000    0.2000    0.2000    0.2000    0.2000
+    0.2000    0.2000    0.2000    0.2000    0.2000
+
+
+ans =
+
+   1.0e-03 *
+
+    0.2000
+    0.2000
+
+Horizon number is 6
+ans =
+
+    0.1666    0.1666    0.1666    0.1666    0.1666    0.1666
+    0.1666    0.1666    0.1666    0.1666    0.1666    0.1666
+
+
+ans =
+
+   1.0e-03 *
+
+    0.1666
+    0.1666
+
+</pre><h2 id="3">1.c.iv</h2><pre class="codeinput">Amat = repmat(1,[1 1 20]);
+nX = size(Amat,1);
+Emat = repmat(0,[1 1 20]);
+Cmat = repmat(1,[1 1 20]);
+Fmat = repmat(1,[1 1 20]);
+sX = 0.1; sW = 5; m0=4;
+<span class="keyword">for</span> k=1:6
+    [LkBatch,VkBatch,eVar] = <span class="keyword">...</span>
+        batchKF(Amat,Emat,Cmat,Fmat,sX,sW,k);
+    fprintf(<span class="string">'Horizon number is %d'</span>,k)
+    LkBatch(end-2*nX+1:end,:)
+    VkBatch(end-2*nX+1:end)
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">Horizon number is 1
+ans =
+
+    0.0196
+    0.0196
+
+
+ans =
+
+    0.9804
+    0.9804
+
+Horizon number is 2
+ans =
+
+    0.0192    0.0192
+    0.0192    0.0192
+
+
+ans =
+
+    0.9615
+    0.9615
+
+Horizon number is 3
+ans =
+
+    0.0189    0.0189    0.0189
+    0.0189    0.0189    0.0189
+
+
+ans =
+
+    0.9434
+    0.9434
+
+Horizon number is 4
+ans =
+
+    0.0185    0.0185    0.0185    0.0185
+    0.0185    0.0185    0.0185    0.0185
+
+
+ans =
+
+    0.9259
+    0.9259
+
+Horizon number is 5
+ans =
+
+    0.0182    0.0182    0.0182    0.0182    0.0182
+    0.0182    0.0182    0.0182    0.0182    0.0182
+
+
+ans =
+
+    0.9091
+    0.9091
+
+Horizon number is 6
+ans =
+
+    0.0179    0.0179    0.0179    0.0179    0.0179    0.0179
+    0.0179    0.0179    0.0179    0.0179    0.0179    0.0179
+
+
+ans =
+
+    0.8929
+    0.8929
+
+</pre><h2 id="4">2</h2><p>Please review code in KF231B.m</p><h2 id="5">3. Steady-State Behavior</h2><pre class="codeinput"><span class="comment">% We assume those following are the process state-space matrices.</span>
+A = [2,-1;-3,4];
+B = [1;1];
+E = [2;1];
+C = [2,1];
+F = 3;
+N = 10; <span class="comment">% Horizontal Number</span>
+<span class="comment">% Initial Conditions</span>
+xkk1 = 0; <span class="comment">% Average values</span>
+Sxkk1 = 1; <span class="comment">% Variance of the initial conditions</span>
+Swk = 1; <span class="comment">% Variance of the time-invariant disturbence</span>
+uk = 1;
+yk = 1;
+<span class="keyword">for</span> k = 1:10
+    [xk1k,Sxk1k,xkk,Sxkk,Sykk1,Lk,Hk,Gk,wkk] = KF231B(xkk1,Sxkk1,A,B,C,E,F,Swk,uk,yk);
+    xkk1 = xk1k;
+    Sxkk1 = Sxk1k;
+    fprintf(<span class="string">'Step %d'</span>,k);
+    disp(Lk);
+    disp(Hk);
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">Step 1    0.6429
+    0.0714
+
+    0.1429
+    0.0714
+
+Step 2    0.0539
+    1.5809
+
+    0.0456
+    0.3859
+
+Step 3   42.8388
+ -110.0164
+
+    7.9868
+  -22.1086
+
+Step 4   -7.6380
+   22.2456
+
+   -1.6554
+    4.3206
+
+Step 5   -6.8907
+   20.2265
+
+   -1.4850
+    3.9405
+
+Step 6   -6.9478
+   20.3908
+
+   -1.5026
+    3.9676
+
+Step 7   -6.9649
+   20.4382
+
+   -1.5071
+    3.9761
+
+Step 8   -6.9766
+   20.4709
+
+   -1.5102
+    3.9819
+
+Step 9   -6.9822
+   20.4867
+
+   -1.5117
+    3.9846
+
+Step 10   -6.9852
+   20.4950
+
+   -1.5125
+    3.9861
+
+</pre><h2 id="6">4. Separating signal from noise</h2><h2 id="7">4.b</h2><h2 id="8">Separating Signal from Noise</h2><p>ME C231B, UC Berkeley, Spring 2018</p><h2 id="9">Sample Time</h2><p>For this discrete-time example, set TS=-1. In Matlab, this just means an unspecified sampling time, totally within the context of pure discrete-time systems.</p><pre class="codeinput">TS = -1;
+</pre><h2 id="10">Create high-pass filter</h2><pre class="codeinput">P1 = 0.4*tf([.5 -.5],[1 0],TS);
+[A1,E1,C1,F1] = ssdata(P1);
+nX1 = size(A1,1); <span class="comment">% will be 1</span>
+nW1 = size(E1,2); <span class="comment">% will be 1</span>
+</pre><h2 id="11">Create low-pass filter</h2><pre class="codeinput">P2 = tf(.04,[1 -.96],TS);
+[A2,E2,C2,F2] = ssdata(P2);
+nX2 = size(A2,1); <span class="comment">% will be 1</span>
+nW2 = size(E2,2); <span class="comment">% will be 1</span>
+</pre><h2 id="12">Bode plot of both</h2><pre class="codeinput">bOpt = bodeoptions;
+bOpt.PhaseVisible = <span class="string">'off'</span>;
+bOpt.MagUnits = <span class="string">'abs'</span>;
+bOpt.MagScale = <span class="string">'log'</span>;
+bOpt.FreqScale = <span class="string">'linear'</span>;
+bOpt.Xlim = [0 pi];
+bOpt.Ylim = [1e-4 2];
+bodeplot(P2,<span class="string">'r'</span>,P1,<span class="string">'k'</span>,bOpt)
+</pre><img vspace="5" hspace="5" src="KalmanHW2_01.png" alt=""> <h2 id="13">Form overall system which adds the outputs</h2><pre class="codeinput">A = blkdiag(A1,A2);
+E = blkdiag(E1,E2);
+C = [C1 C2];
+F = [F1 F2];
+nX = size(A,1);
+nY = size(C,1);
+nW = size(E,2);
+</pre><h2 id="14">Noise variance and initial condition variance</h2><p>Keep it simple, and make everything Identity (appropriate dimension)</p><pre class="codeinput">SigW = eye(nW);
+Sxkk1 = eye(nX);
+</pre><h2 id="15">Run several iterations to get the steady-state Kalman Gains</h2><pre class="codeinput">nIter = 40;
+<span class="keyword">for</span> i=1:nIter
+Swk = SigW;
+[~,Sxk1k,~,Sxkk,Sykk1,Lk,Hk,Gk,~] = <span class="keyword">...</span>
+KF231B([],Sxkk1,A,[],C,E,F,Swk,[],[]);
+Sxkk1 = Sxk1k;
+<span class="keyword">end</span>
+</pre><h2 id="16">Form Kalman filter with 3 outputs</h2><pre class="codeinput">AKF = A-Lk*C;
+BKF = Lk;
+CKF = [eye(nX);eye(nX)-Hk*C;-Gk*C];
+DKF = [zeros(nX,nY);Hk;Gk];
+SSKF = ss(AKF,BKF,CKF,DKF,TS);
+</pre><h2 id="17">Form matrix to extract estimate of y2_{k|k}</h2><p>We need [0 C2]*xhat_{k|k} + [0 F2]*what_{k|k}. Everything is scalar dimension, but we can form this matrix properly so that the example would work on other systems too.</p><pre class="codeinput">M = [zeros(nY,nX) zeros(nY,nX1) C2 zeros(nY,nW1) F2];
+</pre><h2 id="18">Bode plot of filter</h2><p>It makes sense that the filter will try to "pass" some low frequencies, to preserve y2, but will cutoff high-frequencies to reject y1. The "pass" region should extend over the region where P2 has modest gain. The Bode magnitude plot confirms this</p><pre class="codeinput">bodeplot(P2,<span class="string">'r'</span>,P1,<span class="string">'k'</span>,M*SSKF,bOpt)
+legend(<span class="string">'P2'</span>,<span class="string">'P1'</span>,<span class="string">'Filter'</span>);
+</pre><img vspace="5" hspace="5" src="KalmanHW2_02.png" alt=""> <h2 id="19">Single Simulation</h2><p>Create a w sequence consistent with variance assumption</p><pre class="codeinput">wSeq = randn(100,2);
+</pre><h2 id="20">Get y1 and y2 (separate simulations) for later comparison</h2><pre class="codeinput">y1 = lsim(P1,wSeq(:,1));
+y2 = lsim(P2,wSeq(:,2));
+y = y1 + y2;
+</pre><p>Form the cascade (system output goes directly to Kalman Filter), and simulate, obtaining the outputs of Kalman Filter</p><pre class="codeinput">Est = lsim(SSKF*ss(A,E,C,F,TS),wSeq);
+</pre><h2 id="22">Form Estimate of y2</h2><p>Est matrix is 100-by-6, so use transpose correctly to do reconstruction as a matrix multiply</p><pre class="codeinput">y2Est = (M*Est')';
+</pre><h2 id="23">Plot</h2><pre class="codeinput">subplot(1,2,1);
+plot(0:99,y2,<span class="string">'b+'</span>,0:99,y2Est,<span class="string">'ko'</span>,0:99,y,<span class="string">'r*'</span>);
+legend(<span class="string">'y2 (actual)'</span>,<span class="string">'y2 (Est)'</span>,<span class="string">'y (Measured)'</span>);
+subplot(1,2,2);
+plot(0:99,y2,<span class="string">'b+'</span>,0:99,y2Est,<span class="string">'ko'</span>);
+legend(<span class="string">'y2 (actual)'</span>,<span class="string">'y2 (Est)'</span>);
+</pre><img vspace="5" hspace="5" src="KalmanHW2_03.png" alt=""> <h2 id="24">4.c</h2><h2 id="25">4.d</h2><h2 id="26">Create plant</h2><pre class="codeinput">T = 100;  <span class="comment">% sequence length, data runs from 0:(T-1)</span>
+nX = 2;
+nW = 2;
+nY = 1;
+arrayA = repmat([0,0;0,0.96],[1 1 T]);
+arrayE = repmat([0.5,0;0,0.25],[1 1 T]);
+arrayC = repmat([-0.4,0.16],[1 1 T]);
+arrayF = repmat([0.2,0],[1 1 T]);
+</pre><h2 id="27">Create/Declare variance of disturbance and initial condition</h2><pre class="codeinput">arraySW = repmat([1,0;0,1], [1,1,T]);
+Sx0 = eye(nX);
+m0 = 4;
+</pre><h2 id="28">Initialize KF states with appropriate values</h2><pre class="codeinput">Sxii1 = Sx0;
+xii1 = m0;
+</pre><h2 id="29">Create a specific initial condition and noise sequence</h2><p>Under ideal circumstances, this should be consistent with the statistical assumptions made in the previous code cell.  When studying robustness, namely how the filter performance degrades as assumptions are not met, it may be useful to create an initial condition and noise sequence which is not consistent with the assumptions</p><pre class="codeinput">wSeq = randn(2,100);
+x0 = 1;
+</pre><h2 id="30">Simulate the system/KF one step at a time</h2><pre class="codeinput">emptyB = [];  <span class="comment">% this template is for no control signal</span>
+emptyu = [];  <span class="comment">% this template is for no control signal</span>
+y = zeros(nY,T);
+xSeq = zeros(nX,T);
+xSeq(:,1) = x0;
+xEii1 = zeros(nX,T); xEii1(:,1) = m0;
+xEii = zeros(nX,T); yEii = zeros(nY,T); y2Eii = zeros(1,T);
+<span class="keyword">for</span> i=0:T-1
+   iMatlab = i+1;
+   Ai = arrayA(:,:,iMatlab);
+   Ei = arrayE(:,:,iMatlab);
+   Ci = arrayC(:,:,iMatlab);
+   Fi = arrayF(:,:,iMatlab);
+   Swi = arraySW(:,:,iMatlab);
+   wi = wSeq(:,iMatlab);
+   xi = xSeq(:,iMatlab);
+
+   <span class="comment">% Get y(i) from system model, using x(i) and w(i)</span>
+   y(:,iMatlab) = Ci*xi + Fi*wi;
+   <span class="comment">% Get estimates of x(i+1|i) using y(i) from KF</span>
+   [xi1i,Sxi1i,xii,Sxii,Syii1,Li,Hi,Gi,wii] = KF231B(xEii1(:,iMatlab),Sxii1,<span class="keyword">...</span>
+      Ai,emptyB,Ci,Ei,Fi,Swi,emptyu,y(:,iMatlab));
+   xEii(:,iMatlab) = xii;
+   xEii1(:,iMatlab+1) = xi1i;
+   <span class="comment">% Get x(i+1) from system model, using x(i) and w(i)</span>
+   xSeq(:,iMatlab+1) = Ai*xi + Ei*wi;
+   <span class="comment">% Shift the error-variance estimate so that when loop-index i advances,</span>
+   <span class="comment">% the initial condition for this variance is correct.</span>
+   Sxii1 = Sxi1i;
+   yEii(:,iMatlab) = Ci*xii;
+   y2Eii(iMatlab) = C2*xii(2) + F2*wii(2);
+<span class="keyword">end</span>
+y2 = lsim(P2,wSeq(2,:));
+figure
+plot(0:99,y2Eii,<span class="string">'b+'</span>,0:99,y2,<span class="string">'ko'</span>);
+</pre><img vspace="5" hspace="5" src="KalmanHW2_04.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% ME C231B Assignment: Kalman Filtering (part 2)
+close all
+%% 1.c.ii
+Amat = repmat(1,[1 1 20]);
+nX = size(Amat,1);
+Emat = repmat(0,[1 1 20]);
+Cmat = repmat(1,[1 1 20]);
+Fmat = repmat(1,[1 1 20]);
+sX = 1000; sW = 1; m0=2;
+for k=1:6
+    [LkBatch,VkBatch,eVar] = ...
+        batchKF(Amat,Emat,Cmat,Fmat,sX,sW,k);
+    fprintf('Horizon number is %d',k)
+    LkBatch(end-2*nX+1:end,:)
+    VkBatch(end-2*nX+1:end)
+end
+
+%% 1.c.iv
+Amat = repmat(1,[1 1 20]);
+nX = size(Amat,1);
+Emat = repmat(0,[1 1 20]);
+Cmat = repmat(1,[1 1 20]);
+Fmat = repmat(1,[1 1 20]);
+sX = 0.1; sW = 5; m0=4;
+for k=1:6
+    [LkBatch,VkBatch,eVar] = ...
+        batchKF(Amat,Emat,Cmat,Fmat,sX,sW,k);
+    fprintf('Horizon number is %d',k)
+    LkBatch(end-2*nX+1:end,:)
+    VkBatch(end-2*nX+1:end)
+end
+
+%% 2
+% Please review code in KF231B.m
+
+%% 3. Steady-State Behavior
+
+% We assume those following are the process state-space matrices.
+A = [2,-1;-3,4];
+B = [1;1];
+E = [2;1];
+C = [2,1];
+F = 3;
+N = 10; % Horizontal Number
+% Initial Conditions
+xkk1 = 0; % Average values
+Sxkk1 = 1; % Variance of the initial conditions
+Swk = 1; % Variance of the time-invariant disturbence
+uk = 1;
+yk = 1;
+for k = 1:10
+    [xk1k,Sxk1k,xkk,Sxkk,Sykk1,Lk,Hk,Gk,wkk] = KF231B(xkk1,Sxkk1,A,B,C,E,F,Swk,uk,yk);
+    xkk1 = xk1k;
+    Sxkk1 = Sxk1k;
+    fprintf('Step %d',k);
+    disp(Lk);
+    disp(Hk);
+end
+
+%% 4. Separating signal from noise
+
+%% 4.b
+
+%% Separating Signal from Noise
+% ME C231B, UC Berkeley, Spring 2018
+
+%% Sample Time
+% For this discrete-time example, set TS=-1. In Matlab, this
+% just means an unspecified sampling time, totally within the
+% context of pure discrete-time systems.
+TS = -1;
+
+%% Create high-pass filter
+P1 = 0.4*tf([.5 -.5],[1 0],TS);
+[A1,E1,C1,F1] = ssdata(P1);
+nX1 = size(A1,1); % will be 1
+nW1 = size(E1,2); % will be 1
+
+%% Create low-pass filter
+P2 = tf(.04,[1 -.96],TS);
+[A2,E2,C2,F2] = ssdata(P2);
+nX2 = size(A2,1); % will be 1
+nW2 = size(E2,2); % will be 1
+
+%% Bode plot of both
+bOpt = bodeoptions;
+bOpt.PhaseVisible = 'off';
+bOpt.MagUnits = 'abs';
+bOpt.MagScale = 'log';
+bOpt.FreqScale = 'linear';
+bOpt.Xlim = [0 pi];
+bOpt.Ylim = [1e-4 2];
+bodeplot(P2,'r',P1,'k',bOpt)
+
+%% Form overall system which adds the outputs
+A = blkdiag(A1,A2);
+E = blkdiag(E1,E2);
+C = [C1 C2];
+F = [F1 F2];
+nX = size(A,1);
+nY = size(C,1);
+nW = size(E,2);
+
+%% Noise variance and initial condition variance
+% Keep it simple, and make everything Identity (appropriate
+% dimension)
+SigW = eye(nW);
+Sxkk1 = eye(nX);
+
+%% Run several iterations to get the steady-state Kalman Gains
+nIter = 40;
+for i=1:nIter
+Swk = SigW;
+[~,Sxk1k,~,Sxkk,Sykk1,Lk,Hk,Gk,~] = ...
+KF231B([],Sxkk1,A,[],C,E,F,Swk,[],[]);
+Sxkk1 = Sxk1k;
+end
+
+%% Form Kalman filter with 3 outputs
+AKF = A-Lk*C;
+BKF = Lk;
+CKF = [eye(nX);eye(nX)-Hk*C;-Gk*C];
+DKF = [zeros(nX,nY);Hk;Gk];
+SSKF = ss(AKF,BKF,CKF,DKF,TS);
+
+%% Form matrix to extract estimate of y2_{k|k}
+% We need [0 C2]*xhat_{k|k} + [0 F2]*what_{k|k}. Everything
+% is scalar dimension, but we can form this matrix properly
+% so that the example would work on other systems too.
+M = [zeros(nY,nX) zeros(nY,nX1) C2 zeros(nY,nW1) F2];
+
+%% Bode plot of filter
+% It makes sense that the filter will try to "pass" some
+% low frequencies, to preserve y2, but will cutoff
+% high-frequencies to reject y1. The "pass" region should
+% extend over the region where P2 has modest gain. The Bode
+% magnitude plot confirms this
+bodeplot(P2,'r',P1,'k',M*SSKF,bOpt)
+legend('P2','P1','Filter');
+
+%% Single Simulation
+% Create a w sequence consistent with variance assumption
+wSeq = randn(100,2);
+%% Get y1 and y2 (separate simulations) for later comparison
+y1 = lsim(P1,wSeq(:,1));
+y2 = lsim(P2,wSeq(:,2));
+y = y1 + y2;
+%%
+% Form the cascade (system output goes directly to Kalman
+% Filter), and simulate, obtaining the outputs of Kalman
+% Filter
+Est = lsim(SSKF*ss(A,E,C,F,TS),wSeq);
+
+%% Form Estimate of y2
+% Est matrix is 100-by-6, so use transpose correctly to do
+% reconstruction as a matrix multiply
+y2Est = (M*Est')';
+
+%% Plot
+subplot(1,2,1);
+plot(0:99,y2,'b+',0:99,y2Est,'ko',0:99,y,'r*');
+legend('y2 (actual)','y2 (Est)','y (Measured)');
+subplot(1,2,2);
+plot(0:99,y2,'b+',0:99,y2Est,'ko');
+legend('y2 (actual)','y2 (Est)');
+
+%% 4.c
+
+
+%% 4.d
+
+%% Create plant
+T = 100;  % sequence length, data runs from 0:(T-1)
+nX = 2;
+nW = 2;
+nY = 1;
+arrayA = repmat([0,0;0,0.96],[1 1 T]);
+arrayE = repmat([0.5,0;0,0.25],[1 1 T]);
+arrayC = repmat([-0.4,0.16],[1 1 T]);
+arrayF = repmat([0.2,0],[1 1 T]);
+
+%% Create/Declare variance of disturbance and initial condition
+arraySW = repmat([1,0;0,1], [1,1,T]);
+Sx0 = eye(nX);
+m0 = 4;
+
+%% Initialize KF states with appropriate values
+Sxii1 = Sx0;
+xii1 = m0;
+
+%% Create a specific initial condition and noise sequence
+% Under ideal circumstances, this should be consistent with the statistical
+% assumptions made in the previous code cell.  When studying robustness,
+% namely how the filter performance degrades as assumptions are not met, it
+% may be useful to create an initial condition and noise sequence which is
+% not consistent with the assumptions
+wSeq = randn(2,100);
+x0 = 1;
+
+%% Simulate the system/KF one step at a time
+emptyB = [];  % this template is for no control signal
+emptyu = [];  % this template is for no control signal
+y = zeros(nY,T);
+xSeq = zeros(nX,T);
+xSeq(:,1) = x0;
+xEii1 = zeros(nX,T); xEii1(:,1) = m0;
+xEii = zeros(nX,T); yEii = zeros(nY,T); y2Eii = zeros(1,T);
+for i=0:T-1
+   iMatlab = i+1;
+   Ai = arrayA(:,:,iMatlab);
+   Ei = arrayE(:,:,iMatlab);
+   Ci = arrayC(:,:,iMatlab);
+   Fi = arrayF(:,:,iMatlab);
+   Swi = arraySW(:,:,iMatlab);
+   wi = wSeq(:,iMatlab);
+   xi = xSeq(:,iMatlab);
+   
+   % Get y(i) from system model, using x(i) and w(i)
+   y(:,iMatlab) = Ci*xi + Fi*wi;
+   % Get estimates of x(i+1|i) using y(i) from KF
+   [xi1i,Sxi1i,xii,Sxii,Syii1,Li,Hi,Gi,wii] = KF231B(xEii1(:,iMatlab),Sxii1,...
+      Ai,emptyB,Ci,Ei,Fi,Swi,emptyu,y(:,iMatlab));
+   xEii(:,iMatlab) = xii;
+   xEii1(:,iMatlab+1) = xi1i;
+   % Get x(i+1) from system model, using x(i) and w(i)
+   xSeq(:,iMatlab+1) = Ai*xi + Ei*wi;
+   % Shift the error-variance estimate so that when loop-index i advances,
+   % the initial condition for this variance is correct.
+   Sxii1 = Sxi1i;
+   yEii(:,iMatlab) = Ci*xii;
+   y2Eii(iMatlab) = C2*xii(2) + F2*wii(2);
+end
+y2 = lsim(P2,wSeq(2,:));
+figure
+plot(0:99,y2Eii,'b+',0:99,y2,'ko');
+##### SOURCE END #####
+--></body></html>

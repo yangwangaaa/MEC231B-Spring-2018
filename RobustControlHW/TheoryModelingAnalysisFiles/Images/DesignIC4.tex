@@ -1,0 +1,95 @@
+% Set Document Format: IEEE Conference Template
+\documentclass[letterpaper, 10 pt]{article}
+
+%% \newcommand{\WSandTOLIC}[8]{
+%%  \begin{picture}(72,37)(00,00)
+%%  \put(24,12){\framebox(10,08){#3}}
+%%  \put(39,22){\framebox(10,08){#5}}
+%%  \put(56,00){\framebox(10,08){#8}}
+%%  \put(00,16){\circle{2}}
+%%  \put(01,16){\vector(1,0){07}}
+%%  \put(18,16){\vector(1,0){06}}
+%%  \put(34,16){\vector(1,0){09}}
+%%  \put(44,16){\circle{2}}
+%%  \put(45,16){\vector(1,0){27}}
+%%  \put(50,16){\vector(0,-1){11}}
+%%  \put(50,04){\circle{2}}
+%%  \put(72,04){\vector(-1,0){06}}
+%%  \put(56,04){\vector(-1,0){05}}
+%%  \put(49,04){\line(-1,0){49}}
+%%  \put(00,04){\vector(0,1){11}}
+%%  \put(44,37){\vector(0,-1){07}}
+%%  \put(44,22){\vector(0,-1){05}}
+%%  \put(6,17){\makebox(0,0)[rb]{#1}}
+%%  \put(20,17){\makebox(0,0)[lb]{#2}}
+%%  \put(45,37){\makebox(0,0)[l]{#4}}
+%%  \put(72,17){\makebox(0,0)[rb]{#6}}
+%%  \put(72,05){\makebox(0,0)[rb]{#7}}
+%%  \put(-01,14){\makebox(0,0)[r]{$-$}}
+%%  % XXX PJS
+%%  \put(8,12){\dashbox(10,08){$K$}}
+%%  \end{picture}
+%% }
+
+\begin{document}
+%% stuff
+%% \begin{figure}
+%% \setlength{\unitlength}{2.7pt}
+%% \WSandTOLIC{$y_{\rm m}$}{$u$}{$G_4$}{$d$}{$W_{perf}$}{$y$}{$n$}{$W_{mult}$}
+%% \caption{WSandTOLIC}
+%% \end{figure}
+
+\begin{figure}[h]
+\begin{center}
+\begin{picture}(230,55)(0,25)
+\thicklines
+% Reference
+\put(0,70){$r$}
+\put(0,65){\vector(1,0){35}}
+% Sum Junction
+\put(38,65){\circle{6}}
+\put(30,50){\line(1,0){5}}
+% Controller
+\put(55,70){$e$}
+\put(41,65){\vector(1,0){30}}
+\put(71,50){\dashbox(30,30){$K(s)$}}
+% Controller Output
+\put(115,70){$u$}
+\put(101,65){\vector(1,0){66}}
+\put(125,65){\line(0,1){40}}
+\put(125,105){\vector(1,0){30}}
+\put(155,90){\framebox(30,30){$W_u(s)$}}
+\put(185,105){\vector(1,0){20}}
+% Plant
+\put(137,65){\vector(1,0){30}}
+\put(167,50){\framebox(30,30){$G(s)$}}
+\put(197,65){\line(1,0){24}}
+\put(210,70){$y$}
+% Output
+\put(50,65){\line(0,1){80}}
+\put(50,145){\vector(1,0){100}}
+\put(150,130){\framebox(40,30){$W_{perf}(s)$}}
+\put(190,145){\vector(1,0){20}}
+% Feedback
+\put(221,65){\line(0,-1){40}}
+\put(221,25){\line(-1,0){183}}
+\put(38,25){\vector(0,1){37}}
+\end{picture}
+%\caption{Feedback Loop}
+\label{fig:feedback}
+\end{center}
+\end{figure}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,271 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>stateSpaceParameterUncertainty</title><meta name="generator" content="MATLAB 9.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-04-14"><meta name="DC.source" content="stateSpaceParameterUncertainty.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">Parameter uncertainty in Flexible structure</a></li><li><a href="#2">Lumped parameter values</a></li><li><a href="#3">Distribute these over N elements</a></li><li><a href="#4">Add uncertainty to each term</a></li><li><a href="#5">Mass, Damping and Stiffness Matrices</a></li><li><a href="#8">Create A and B matrices of uncertain system.</a></li><li><a href="#9">Check nominal system poles</a></li><li><a href="#10">Bode magnitude from <img src="stateSpaceParameterUncertainty_eq03109776449890965049.png" alt="$F_2$" style="width:11px;height:10px;"> to <img src="stateSpaceParameterUncertainty_eq05596116064294028956.png" alt="$z_4$" style="width:9px;height:7px;"></a></li><li><a href="#11">Attribution</a></li><li><a href="#12">File Information</a></li></ul></div><h2 id="1">Parameter uncertainty in Flexible structure</h2><p>Model properties</p><div><ul><li>4 mode flexible structure</li><li>uncertain mass, damping and stiffness parameters</li></ul></div><p>Use <tt>ureal</tt> parameters (12 in all) to obtain <tt>uss</tt> model.  All parameters enter in <i>rank=1</i> fashion, so each has only one copy in final LFT model</p><pre class="codeinput"><span class="comment">% UC Berkeley, ME C231B/EECS C220C, Spring 2017</span>
+</pre><h2 id="2">Lumped parameter values</h2><pre class="codeinput">M = 1;
+K = 1;
+xi = 0.01;
+C = 2*sqrt(M*K)*xi;
+</pre><h2 id="3">Distribute these over N elements</h2><pre class="codeinput">N = 4;
+Kv = repmat(N*K,[1 N]);
+Mv = repmat(M/N,[1 N]);
+Cv = repmat(C,[1 N]);
+</pre><h2 id="4">Add uncertainty to each term</h2><p>For east access, store each uncertain element in an array, with appropriate name, for use later in building the state-space model.</p><pre class="codeinput">percK = 5;
+Kv = [ureal(<span class="string">'k1'</span>,Kv(1),<span class="string">'Percentage'</span>,percK), <span class="keyword">...</span>
+   ureal(<span class="string">'k2'</span>,Kv(2),<span class="string">'Percentage'</span>,percK), <span class="keyword">...</span>
+   ureal(<span class="string">'k3'</span>,Kv(3),<span class="string">'Percentage'</span>,percK), <span class="keyword">...</span>
+   ureal(<span class="string">'k4'</span>,Kv(4),<span class="string">'Percentage'</span>,percK)];
+perkM = 5;
+Mv = [ureal(<span class="string">'m1'</span>,Mv(1),<span class="string">'Percentage'</span>,perkM), <span class="keyword">...</span>
+   ureal(<span class="string">'m2'</span>,Mv(2),<span class="string">'Percentage'</span>,perkM), <span class="keyword">...</span>
+   ureal(<span class="string">'m3'</span>,Mv(3),<span class="string">'Percentage'</span>,perkM), <span class="keyword">...</span>
+   ureal(<span class="string">'m4'</span>,Mv(4),<span class="string">'Percentage'</span>,perkM)];
+perkC = 5;
+Cv = [ureal(<span class="string">'c1'</span>,Cv(1),<span class="string">'Percentage'</span>,perkC), <span class="keyword">...</span>
+   ureal(<span class="string">'c2'</span>,Cv(2),<span class="string">'Percentage'</span>,perkC), <span class="keyword">...</span>
+   ureal(<span class="string">'c3'</span>,Cv(3),<span class="string">'Percentage'</span>,perkC), <span class="keyword">...</span>
+   ureal(<span class="string">'c4'</span>,Cv(4),<span class="string">'Percentage'</span>,perkC)];
+</pre><h2 id="5">Mass, Damping and Stiffness Matrices</h2><p>Standard <img src="stateSpaceParameterUncertainty_eq14518199287586563503.png" alt="$M \ddot z + C \dot z + K z = F$" style="width:97px;height:9px;"> model.  Define <img src="stateSpaceParameterUncertainty_eq11600038977517913645.png" alt="$x = [z ; \dot z]$" style="width:42px;height:11px;">.  Form <img src="stateSpaceParameterUncertainty_eq00802513524912003067.png" alt="$M$" style="width:12px;height:8px;">, <img src="stateSpaceParameterUncertainty_eq03986222445007418011.png" alt="$C$" style="width:8px;height:8px;"> and <img src="stateSpaceParameterUncertainty_eq03845174387838694102.png" alt="$K$" style="width:10px;height:8px;"> matrices, all of which are uncertain.</p><pre class="codeinput">Mmat = diag(Mv)
+</pre><pre class="codeoutput">
+Mmat =
+
+  Uncertain matrix with 4 rows and 4 columns.
+  The uncertainty consists of the following blocks:
+    m1: Uncertain real, nominal = 0.25, variability = [-5,5]%, 1 occurrences
+    m2: Uncertain real, nominal = 0.25, variability = [-5,5]%, 1 occurrences
+    m3: Uncertain real, nominal = 0.25, variability = [-5,5]%, 1 occurrences
+    m4: Uncertain real, nominal = 0.25, variability = [-5,5]%, 1 occurrences
+
+Type "Mmat.NominalValue" to see the nominal value, "get(Mmat)" to see all properties, and "Mmat.Uncertainty" to interact with the uncertain elements.
+
+</pre><pre class="codeinput">Cmat = -[-Cv(1)-Cv(2) Cv(2) 0 0;<span class="keyword">...</span>
+   Cv(2) -Cv(2)-Cv(3) Cv(3) 0;<span class="keyword">...</span>
+   0 Cv(3) -Cv(3)-Cv(4) Cv(4);<span class="keyword">...</span>
+   0  0 Cv(4) -Cv(4)]
+</pre><pre class="codeoutput">
+Cmat =
+
+  Uncertain matrix with 4 rows and 4 columns.
+  The uncertainty consists of the following blocks:
+    c1: Uncertain real, nominal = 0.02, variability = [-5,5]%, 1 occurrences
+    c2: Uncertain real, nominal = 0.02, variability = [-5,5]%, 1 occurrences
+    c3: Uncertain real, nominal = 0.02, variability = [-5,5]%, 1 occurrences
+    c4: Uncertain real, nominal = 0.02, variability = [-5,5]%, 1 occurrences
+
+Type "Cmat.NominalValue" to see the nominal value, "get(Cmat)" to see all properties, and "Cmat.Uncertainty" to interact with the uncertain elements.
+
+</pre><pre class="codeinput">Kmat = -[-Kv(1)-Kv(2) Kv(2) 0 0;<span class="keyword">...</span>
+   Kv(2) -Kv(2)-Kv(3) Kv(3) 0;<span class="keyword">...</span>
+   0 Kv(3) -Kv(3)-Kv(4) Kv(4);<span class="keyword">...</span>
+   0  0  Kv(4) -Kv(4)]
+</pre><pre class="codeoutput">
+Kmat =
+
+  Uncertain matrix with 4 rows and 4 columns.
+  The uncertainty consists of the following blocks:
+    k1: Uncertain real, nominal = 4, variability = [-5,5]%, 1 occurrences
+    k2: Uncertain real, nominal = 4, variability = [-5,5]%, 1 occurrences
+    k3: Uncertain real, nominal = 4, variability = [-5,5]%, 1 occurrences
+    k4: Uncertain real, nominal = 4, variability = [-5,5]%, 1 occurrences
+
+Type "Kmat.NominalValue" to see the nominal value, "get(Kmat)" to see all properties, and "Kmat.Uncertainty" to interact with the uncertain elements.
+
+</pre><h2 id="8">Create A and B matrices of uncertain system.</h2><p>Model has independent forces at each mass as inputs.  All states are listed as outputs.  <img src="stateSpaceParameterUncertainty_eq05147331747641807187.png" alt="$A$" style="width:8px;height:8px;"> matrix depends on mass, damping and stiffness matrices, while <img src="stateSpaceParameterUncertainty_eq10170753361147586657.png" alt="$B$" style="width:9px;height:8px;"> only depends on mass matrix.  Since outputs consist of all states, <img src="stateSpaceParameterUncertainty_eq03986222445007418011.png" alt="$C$" style="width:8px;height:8px;"> and <img src="stateSpaceParameterUncertainty_eq16171345478199012472.png" alt="$D$" style="width:9px;height:8px;"> matrices are simple.</p><pre class="codeinput">A = [zeros(N,N) eye(N); inv(Mmat)*[-Kmat -Cmat]];
+B = [zeros(N,N); inv(Mmat)*eye(4)];
+C = eye(2*N);
+S = ss(A,B,C,0)
+</pre><pre class="codeoutput">
+S =
+
+  Uncertain continuous-time state-space model with 8 outputs, 4 inputs, 8 states.
+  The model uncertainty consists of the following blocks:
+    c1: Uncertain real, nominal = 0.02, variability = [-5,5]%, 1 occurrences
+    c2: Uncertain real, nominal = 0.02, variability = [-5,5]%, 1 occurrences
+    c3: Uncertain real, nominal = 0.02, variability = [-5,5]%, 1 occurrences
+    c4: Uncertain real, nominal = 0.02, variability = [-5,5]%, 1 occurrences
+    k1: Uncertain real, nominal = 4, variability = [-5,5]%, 1 occurrences
+    k2: Uncertain real, nominal = 4, variability = [-5,5]%, 1 occurrences
+    k3: Uncertain real, nominal = 4, variability = [-5,5]%, 1 occurrences
+    k4: Uncertain real, nominal = 4, variability = [-5,5]%, 1 occurrences
+    m1: Uncertain real, nominal = 0.25, variability = [-5,5]%, 1 occurrences
+    m2: Uncertain real, nominal = 0.25, variability = [-5,5]%, 1 occurrences
+    m3: Uncertain real, nominal = 0.25, variability = [-5,5]%, 1 occurrences
+    m4: Uncertain real, nominal = 0.25, variability = [-5,5]%, 1 occurrences
+
+Type "S.NominalValue" to see the nominal value, "get(S)" to see all properties, and "S.Uncertainty" to interact with the uncertain elements.
+
+</pre><h2 id="9">Check nominal system poles</h2><pre class="codeinput">damp(pole(S.NominalValue))
+</pre><pre class="codeoutput">                                                                        
+         Pole              Damping       Frequency       Time Constant  
+                                       (rad/TimeUnit)     (TimeUnit)    
+                                                                        
+ -1.41e-01 + 7.52e+00i     1.88e-02       7.52e+00          7.08e+00    
+ -1.41e-01 - 7.52e+00i     1.88e-02       7.52e+00          7.08e+00    
+ -9.39e-02 + 6.13e+00i     1.53e-02       6.13e+00          1.07e+01    
+ -9.39e-02 - 6.13e+00i     1.53e-02       6.13e+00          1.07e+01    
+ -4.00e-02 + 4.00e+00i     1.00e-02       4.00e+00          2.50e+01    
+ -4.00e-02 - 4.00e+00i     1.00e-02       4.00e+00          2.50e+01    
+ -4.82e-03 + 1.39e+00i     3.47e-03       1.39e+00          2.07e+02    
+ -4.82e-03 - 1.39e+00i     3.47e-03       1.39e+00          2.07e+02    
+</pre><h2 id="10">Bode magnitude from <img src="stateSpaceParameterUncertainty_eq03109776449890965049.png" alt="$F_2$" style="width:11px;height:10px;"> to <img src="stateSpaceParameterUncertainty_eq05596116064294028956.png" alt="$z_4$" style="width:9px;height:7px;"></h2><p>Plot 250 samples of Bode Magnitude plot</p><pre class="codeinput">nSamples = 250;
+bodemag(usample(S(4,2),nSamples))
+ylim([-50 50])
+xlim([0.1 10])
+</pre><img vspace="5" hspace="5" src="stateSpaceParameterUncertainty_01.png" alt=""> <h2 id="11">Attribution</h2><p>Copyright 2016-17, Andy Packard.  This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License. To view a copy of this license, visit <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">http://creativecommons.org/licenses/by-nc-sa/3.0/</a> or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.</p><h2 id="12">File Information</h2><pre class="codeinput">disp(mfilename)
+</pre><pre class="codeoutput">stateSpaceParameterUncertainty
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Parameter uncertainty in Flexible structure
+% Model properties
+%
+% * 4 mode flexible structure
+% * uncertain mass, damping and stiffness parameters
+%
+% Use |ureal| parameters (12 in all) to obtain |uss| model.  All parameters
+% enter in _rank=1_ fashion, so each has only one copy in final LFT model
+
+% UC Berkeley, ME C231B/EECS C220C, Spring 2017
+
+%% Lumped parameter values
+M = 1;
+K = 1;
+xi = 0.01;
+C = 2*sqrt(M*K)*xi;
+
+%% Distribute these over N elements
+N = 4;
+Kv = repmat(N*K,[1 N]);
+Mv = repmat(M/N,[1 N]);
+Cv = repmat(C,[1 N]);
+
+%% Add uncertainty to each term
+% For east access, store each uncertain element in an array, with
+% appropriate name, for use later in building the state-space model.
+percK = 5;
+Kv = [ureal('k1',Kv(1),'Percentage',percK), ...
+   ureal('k2',Kv(2),'Percentage',percK), ...
+   ureal('k3',Kv(3),'Percentage',percK), ...
+   ureal('k4',Kv(4),'Percentage',percK)];
+perkM = 5;
+Mv = [ureal('m1',Mv(1),'Percentage',perkM), ...
+   ureal('m2',Mv(2),'Percentage',perkM), ...
+   ureal('m3',Mv(3),'Percentage',perkM), ...
+   ureal('m4',Mv(4),'Percentage',perkM)];
+perkC = 5;
+Cv = [ureal('c1',Cv(1),'Percentage',perkC), ...
+   ureal('c2',Cv(2),'Percentage',perkC), ...
+   ureal('c3',Cv(3),'Percentage',perkC), ...
+   ureal('c4',Cv(4),'Percentage',perkC)];
+
+%% Mass, Damping and Stiffness Matrices
+% Standard $M \ddot z + C \dot z + K z = F$ model.  Define $x = [z ; \dot
+% z]$.  Form $M$, $C$ and $K$ matrices, all of which are uncertain.
+Mmat = diag(Mv)
+%%
+Cmat = -[-Cv(1)-Cv(2) Cv(2) 0 0;...
+   Cv(2) -Cv(2)-Cv(3) Cv(3) 0;...
+   0 Cv(3) -Cv(3)-Cv(4) Cv(4);...
+   0  0 Cv(4) -Cv(4)]
+%%
+Kmat = -[-Kv(1)-Kv(2) Kv(2) 0 0;...
+   Kv(2) -Kv(2)-Kv(3) Kv(3) 0;...
+   0 Kv(3) -Kv(3)-Kv(4) Kv(4);...
+   0  0  Kv(4) -Kv(4)]
+
+%% Create A and B matrices of uncertain system.
+% Model has independent forces at each mass as inputs.  All states are
+% listed as outputs.  $A$ matrix depends on mass, damping and stiffness
+% matrices, while $B$ only depends on mass matrix.  Since outputs consist
+% of all states, $C$ and $D$ matrices are simple.
+A = [zeros(N,N) eye(N); inv(Mmat)*[-Kmat -Cmat]];
+B = [zeros(N,N); inv(Mmat)*eye(4)];
+C = eye(2*N);
+S = ss(A,B,C,0)
+
+%% Check nominal system poles
+damp(pole(S.NominalValue))
+
+%% Bode magnitude from $F_2$ to $z_4$
+% Plot 250 samples of Bode Magnitude plot
+nSamples = 250;
+bodemag(usample(S(4,2),nSamples))
+ylim([-50 50])
+xlim([0.1 10])
+
+%% Attribution
+% Copyright 2016-17, Andy Packard.  This work is licensed under the Creative
+% Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License. To
+% view a copy of this license, visit
+% http://creativecommons.org/licenses/by-nc-sa/3.0/ or send a letter to
+% Creative Commons, 444 Castro Street, Suite 900, Mountain View,
+% California, 94041, USA.
+
+%% File Information
+disp(mfilename)
+##### SOURCE END #####
+--></body></html>
