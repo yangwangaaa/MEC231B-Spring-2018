@@ -3,7 +3,7 @@
 %% 5.a
 P = tf(1,[1 -1]); 
 C = tf([5.8 9],[0.04 1 0]);
-S = 1/(1+P*C);
+S = feedback(1,P*C);
 Wp = tf([0.667 3],[1 0.003]);
 normTol = 0.001;
 norm(Wp*S,inf,normTol)<=1 
@@ -18,8 +18,8 @@ legend('S','1/Wp')
 % it by using the function robstab.
 delta = ultidyn('delta',[1 1],'bound',1);
 Pu = P*(1+0.4*delta);
-System1 = feedback(Pu,C);
-[stabmarg,wcu] = robuststab(System1)
+System1 = feedback(C,Pu);
+[stabmarg,wcu,report] = robuststab(System1)
 
 %% 5.d
 [wcg,wcu] = wcgain(Wp/(1+Pu*C))
