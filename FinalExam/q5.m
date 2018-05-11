@@ -29,8 +29,8 @@ wcu.delta
 %% 5.e
 % We can see the worst case gain from the intersection of 1/Wp and the
 % sensitivity of the worse case Pu (refer to the small gain theorem), the
-% intersection frequency is larger than 1, which confirm the stability and
-% the worse case gain seen in 5.c and 5.d.  
+% intersection frequency is larger than 1, which confirm the worse case
+% gain seen in 5.d. 
 Pu_worst = P*(1+0.4*wcu.delta);
 Sworst = 1/(1+Pu_worst*C);
 figure
