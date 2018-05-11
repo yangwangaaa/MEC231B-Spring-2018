@@ -1,3 +1,4 @@
+%% q3
 normTol = 1e-5;
 delta = complex(randn,randn);
 wBar = exp(2*randn);
