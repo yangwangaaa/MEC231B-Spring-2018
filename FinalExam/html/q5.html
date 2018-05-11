@@ -1,0 +1,176 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>q5</title><meta name="generator" content="MATLAB 9.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-05-10"><meta name="DC.source" content="q5.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>q5</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">5.a</a></li><li><a href="#2">5.b</a></li><li><a href="#3">5.c</a></li><li><a href="#4">5.d</a></li><li><a href="#5">5.e</a></li></ul></div><h2 id="1">5.a</h2><pre class="codeinput">P = tf(1,[1 -1]);
+C = tf([5.8 9],[0.04 1 0]);
+S = 1/(1+P*C);
+Wp = tf([0.667 3],[1 0.003]);
+normTol = 0.001;
+norm(Wp*S,inf,normTol)&lt;=1
+</pre><pre class="codeoutput">
+ans =
+
+  logical
+
+   1
+
+</pre><h2 id="2">5.b</h2><pre class="codeinput">figure
+bodemag(S,<span class="string">'r--'</span>,1/Wp,<span class="string">'bo'</span>)
+legend(<span class="string">'S'</span>,<span class="string">'1/Wp'</span>)
+</pre><img vspace="5" hspace="5" src="q5_01.png" alt=""> <h2 id="3">5.c</h2><p>Based on the results of 4.g, the system is stable, moreover we can verify it by using the function robstab.</p><pre class="codeinput">delta = ultidyn(<span class="string">'delta'</span>,[1 1],<span class="string">'bound'</span>,1);
+Pu = P*(1+0.4*delta);
+Snew = 1/(1+Pu*C);
+[stabmarg,wcu] = robstab(Snew);
+</pre><h2 id="4">5.d</h2><pre class="codeinput">[wcg,wcu] = wcgain(Wp/(1+Pu*C))
+<span class="comment">% specific stable linear system</span>
+wcu.delta
+</pre><pre class="codeoutput">
+wcg = 
+
+  struct with fields:
+
+           LowerBound: 2.1644
+           UpperBound: 2.1683
+    CriticalFrequency: 3.4948
+
+
+wcu = 
+
+  struct with fields:
+
+    delta: [1&times;1 ss]
+
+
+ans =
+ 
+  A = 
+           x1      x2      x3      x4
+   x1  -4.699  -9.398       0   6.815
+   x2       0  -4.699       0   6.815
+   x3       0       0  -2.471   2.471
+   x4       0       0  -2.471  -2.471
+ 
+  B = 
+          u1
+   x1      0
+   x2      0
+   x3  2.223
+   x4  2.223
+ 
+  C = 
+           x1      x2      x3      x4
+   y1  -3.066  -3.066       0   2.223
+ 
+  D = 
+       u1
+   y1   0
+ 
+Continuous-time state-space model.
+
+</pre><h2 id="5">5.e</h2><pre class="codeinput">Pu_worse = P*(1+0.4*wcu.delta);
+figure
+bodemag(S,<span class="string">'r-'</span>,P,<span class="string">'go'</span>,Pu_worse,<span class="string">'b+'</span>,1/Wp,<span class="string">'y.'</span>)
+legend(<span class="string">'S'</span>,<span class="string">'P'</span>,<span class="string">'Worst Case Pu'</span>,<span class="string">'1/Wp'</span>)
+</pre><img vspace="5" hspace="5" src="q5_02.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% q5
+
+%% 5.a
+P = tf(1,[1 -1]); 
+C = tf([5.8 9],[0.04 1 0]);
+S = 1/(1+P*C);
+Wp = tf([0.667 3],[1 0.003]);
+normTol = 0.001;
+norm(Wp*S,inf,normTol)<=1 
+
+%% 5.b
+figure
+bodemag(S,'rREPLACE_WITH_DASH_DASH',1/Wp,'bo')
+legend('S','1/Wp')
+
+%% 5.c
+% Based on the results of 4.g, the system is stable, moreover we can verify
+% it by using the function robstab.
+delta = ultidyn('delta',[1 1],'bound',1);
+Pu = P*(1+0.4*delta);
+Snew = 1/(1+Pu*C);
+[stabmarg,wcu] = robstab(Snew);
+
+%% 5.d
+[wcg,wcu] = wcgain(Wp/(1+Pu*C))
+% specific stable linear system
+wcu.delta
+
+%% 5.e
+Pu_worse = P*(1+0.4*wcu.delta);
+figure
+bodemag(S,'r-',P,'go',Pu_worse,'b+',1/Wp,'y.')
+legend('S','P','Worst Case Pu','1/Wp')
+
+##### SOURCE END #####
+--></body></html>
