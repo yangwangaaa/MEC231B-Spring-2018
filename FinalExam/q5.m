@@ -18,8 +18,8 @@ legend('S','1/Wp')
 % it by using the function robstab.
 delta = ultidyn('delta',[1 1],'bound',1);
 Pu = P*(1+0.4*delta);
-Snew = 1/(1+Pu*C);
-[stabmarg,wcu] = robstab(Snew);
+System1 = feedback(Pu,C);
+[stabmarg,wcu] = robuststab(System1)
 
 %% 5.d
 [wcg,wcu] = wcgain(Wp/(1+Pu*C))
@@ -40,6 +40,19 @@ legend('Sensitivity for P','Sensitivity for the worst Pu','1/Wp')
 
 %% 5.f
 figure
-step(S,P,Pu_worst,4)
-legend('S','P','Worst case Pu')
+step(S,Sworst,4)
+legend('Step response of S for P','Step response of S for Worst case Pu')
 
+%% 5.g Task 1
+Wu = makeweight(0.4, 20, 400);
+delta = ultidyn('delta',[1 1],'bound',1);
+PuNew = P*(1+Wu*delta);
+robuststab(feedback(PuNew,C))
+
+%% 5.g Task 2
+[wcg,wcu] = wcgain(Wp/(1+PuNew*C))
+
+%% 5.g Task 3
+figure
+Pu_worst = P*(1+Wu*wcu.delta);
+step(1/(1+P*C),1/(1+Pu_worst*C),4)
