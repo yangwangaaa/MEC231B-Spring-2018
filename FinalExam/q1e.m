@@ -63,7 +63,7 @@ u = sdpvar(2,N);
 constr = [z(:,N+1)==zT, z(:,1) == z0];
 cost = 0;
 SampleNum = 10;
-slack = 0;
+slack = 10000;
 for k = 1:N
     constr = constr+...
          [z(1,k+1) == z(1,k)-u(1,k)*sin(z(3,k))+u(1,k)*sin(z(3,k)+u(2,k)),...
@@ -72,7 +72,7 @@ for k = 1:N
           model.u.min(2) <= u(2,k),u(2,k) <= -model.u.min(2),...
           model.z.min <= z(:,k+1),z(:,k+1)<=model.z.max]; %model.u.min(1) <= u(1,k),... don't need anymore
     cost = cost + (u(2,k)*u(1,k))^2;
-    cost = cost + slack*(1/abs(u(1,k))-1/abs(model.u.min(1)));
+    cost = cost + slack*(1/(u(1,k)^2)-1/(model.u.min(1)^2));
     for p = 1:SampleNum-1
         for q = 1:size(obs,2)
             zs = z(:,k)+p/SampleNum*(z(:,k+1)-z(:,k));
