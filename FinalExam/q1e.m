@@ -1,4 +1,4 @@
-%% 1.d
+%% 1.e
 clear all
 clear yalmip
 
@@ -24,7 +24,7 @@ model.z.max=[20;20;2*pi];
 %Initial, terminal conditions and horizon
 z0 = [-10;10;0];  
 zT = [0;0;-pi/2];  
-N=6; %navigation  horizon
+N=4; %navigation  horizon
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -52,7 +52,6 @@ for j=1:length(obs)
     obs{j}.poly=obs{j}.T*unitbox(2)+obs{j}.center;
     [AA{j},bb{j}]=double(obs{j}.poly);
     lambda{j} = sdpvar(size(AA{j},1),N,'full');
-    s{j} = sdpvar(size(bb{j},1),N,'full');
 end
 
 %% Setup the Navigation Problem
@@ -64,23 +63,23 @@ u = sdpvar(2,N);
 constr = [z(:,N+1)==zT, z(:,1) == z0];
 cost = 0;
 SampleNum = 10;
+slack = 0;
 for k = 1:N
     constr = constr+...
          [z(1,k+1) == z(1,k)-u(1,k)*sin(z(3,k))+u(1,k)*sin(z(3,k)+u(2,k)),...
           z(2,k+1) == z(2,k)+u(1,k)*cos(z(3,k))-u(1,k)*cos(z(3,k)+u(2,k)),...
           z(3,k+1) == z(3,k)+u(2,k),...
-          model.u.min(1) <= u(1,k),model.u.min(2) <= u(2,k),u(2,k) <= -model.u.min(2),...
-          model.z.min <= z(:,k+1),z(:,k+1)<=model.z.max];
+          model.u.min(2) <= u(2,k),u(2,k) <= -model.u.min(2),...
+          model.z.min <= z(:,k+1),z(:,k+1)<=model.z.max]; %model.u.min(1) <= u(1,k),... don't need anymore
     cost = cost + (u(2,k)*u(1,k))^2;
+    cost = cost + slack*(1/abs(u(1,k))-1/abs(model.u.min(1)));
     for p = 1:SampleNum-1
         for q = 1:size(obs,2)
             zs = z(:,k)+p/SampleNum*(z(:,k+1)-z(:,k));
             A = AA{q}; b = bb{q};
-            constr = constr + [(AA{q}*zs(1:2)-bb{q})'*lambda{q}(:,k) >= -s{q}(k)];
-            % avoid unnecessary warning of inequality
-            constr = constr + [lambda{q}(:,k)'*AA{q}*AA{q}'*lambda{q}(:,k)==1];
+            constr = constr + [(AA{q}*zs(1:2)-bb{q})'*lambda{q}(:,k) > 0];
+            constr = constr + [lambda{q}(:,k)'*AA{q}*AA{q}'*lambda{q}(:,k)<=1];
             constr = constr + [lambda{q}(:,k) >= 0];
-            constr = constr + [s{q}(k) >= 0];
         end
     end
 end

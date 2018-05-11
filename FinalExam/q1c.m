@@ -55,8 +55,8 @@ for j=1:length(obs)
 end
 
 %% Setup the Navigation Problem
-%options = sdpsettings('solver','ipopt');
-options = sdpsettings('solver','fmincon','verbose',1);
+options = sdpsettings('solver','ipopt');
+%options = sdpsettings('solver','fmincon','verbose',1);
 
 z = sdpvar(3,N+1);
 u = sdpvar(2,N);
