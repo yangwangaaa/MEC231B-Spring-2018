@@ -203,3 +203,5 @@ for j=1:length(obs)
 plot(polytope(AA{j},bb{j}));
 end
 axis([model.z.min(1) model.z.max(1) model.z.min(2) model.z.max(2)])
+
+%% 1.d
