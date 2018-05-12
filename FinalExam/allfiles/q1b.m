@@ -1,4 +1,4 @@
-%% 1.c
+%% 1.b
 clear all
 clear yalmip
 

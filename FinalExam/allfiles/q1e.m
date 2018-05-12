@@ -72,6 +72,8 @@ for k = 1:N
           model.u.min(2) <= u(2,k),u(2,k) <= -model.u.min(2),...
           model.z.min <= z(:,k+1),z(:,k+1)<=model.z.max]; %model.u.min(1) <= u(1,k),... don't need anymore
     cost = cost + (u(2,k)*u(1,k))^2;
+    % Here we introduce a slack variable for the radius of turning which we
+    % have seen in ME231A to solve this problem
     cost = cost + slack*(1/(u(1,k)^2)-1/(model.u.min(1)^2));
     for p = 1:SampleNum-1
         for q = 1:size(obs,2)

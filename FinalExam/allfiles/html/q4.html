@@ -1,0 +1,303 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>q.4</title><meta name="generator" content="MATLAB 9.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-05-11"><meta name="DC.source" content="q4.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>q.4</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">4.a</a></li><li><a href="#2">4.b</a></li><li><a href="#3">4.c</a></li><li><a href="#4">4.d</a></li><li><a href="#5">4.e</a></li><li><a href="#6">4.f</a></li><li><a href="#7">4.g</a></li><li><a href="#8">4.h</a></li><li><a href="#9">4.i</a></li></ul></div><h2 id="1">4.a</h2><pre class="codeinput">P = tf(1,[1,-1]);
+C = tf([5.8 9],[0.04 1 0]);
+isstable(feedback(P,C))
+</pre><pre class="codeoutput">
+ans =
+
+  logical
+
+   1
+
+</pre><h2 id="2">4.b</h2><pre class="codeinput">G = -C/(1+P*C);
+</pre><h2 id="3">4.c</h2><pre class="codeinput">normTol = 0.001;
+fprintf(<span class="string">'The smallest absolute value of Delta calculated by the small gain thm\n'</span>)
+[InfNorm,freq] = norm(G,inf,normTol);
+bound = 1/InfNorm
+<span class="comment">%verification: to get the smallest delta</span>
+M = freqresp(G,freq);
+[U,S,V]=svd(M);
+deltamin = -1/S(1,1)*V(:,1)*U(:,1)';
+pole(feedback(P-deltamin,C))
+<span class="comment">%one pure imaginary pool appear at this critical value</span>
+</pre><pre class="codeoutput">The smallest absolute value of Delta calculated by the small gain thm
+
+bound =
+
+    0.1454
+
+
+ans =
+
+  -1.3912 -13.6340i
+  -0.0000 + 7.8064i
+  -2.3928 - 0.1569i
+
+</pre><h2 id="4">4.d</h2><p>We see that it can tolerate up to 100% of the modeled uncertainty, the results found here is eactly as we have seen in 4.c</p><pre class="codeinput">deltamin = ucomplex(<span class="string">'delta'</span>,0,<span class="string">'Radius'</span>,0.1454);
+<span class="comment">%we use the smallest value found in 4.c</span>
+[stabmarg,destabunc,report] = robuststab(feedback(P+deltamin,C))
+</pre><pre class="codeoutput">
+stabmarg = 
+
+  struct with fields:
+
+                LowerBound: 1.0000
+                UpperBound: 1.0000
+    DestabilizingFrequency: 7.7805
+
+
+destabunc = 
+
+  struct with fields:
+
+    delta: -0.1393 + 0.0418i
+
+
+report =
+
+  6&times;87 char array
+
+    'System is robustly stable for the modeled uncertainty.                                 '
+    ' -- It can tolerate up to 100% of the modeled uncertainty.                             '
+    ' -- There is a destabilizing perturbation amounting to 100% of the modeled uncertainty.'
+    ' -- This perturbation causes an instability at the frequency 7.78 rad/seconds.         '
+    ' -- Sensitivity with respect to each uncertain element is:                             '
+    '      100% for delta. Increasing delta by 25% decreases the margin by 25%.             '
+
+</pre><h2 id="5">4.e</h2><pre class="codeinput">deltamin = -1/S(1,1)*V(:,1)*U(:,1)';
+deltanew = cnum2sys(deltamin,freq);
+pole(feedback(P+deltanew, C))
+<span class="comment">%We can see clearly that there are two poles on the imaginary</span>
+<span class="comment">% axis, thus the dynamic system generated in 4.e is unstable.</span>
+</pre><pre class="codeoutput">
+ans =
+
+ -26.8942 +40.5961i
+ -26.8942 -40.5961i
+  -1.5000 + 1.4554i
+  -1.5000 - 1.4554i
+
+</pre><h2 id="6">4.f</h2><pre class="codeinput">deltanew = ultidyn(<span class="string">'delta'</span>, [1 1], <span class="string">'Bound'</span>, norm(deltamin));
+[stabmarg,destabunc,report] = robuststab(feedback(P+deltanew,C))
+</pre><pre class="codeoutput">
+stabmarg = 
+
+  struct with fields:
+
+                LowerBound: 1.0000
+                UpperBound: 1.0000
+    DestabilizingFrequency: 7.8176
+
+
+destabunc = 
+
+  struct with fields:
+
+    delta: [1&times;1 ss]
+
+
+report =
+
+  6&times;87 char array
+
+    'System is robustly stable for the modeled uncertainty.                                 '
+    ' -- It can tolerate up to 100% of the modeled uncertainty.                             '
+    ' -- There is a destabilizing perturbation amounting to 100% of the modeled uncertainty.'
+    ' -- This perturbation causes an instability at the frequency 7.82 rad/seconds.         '
+    ' -- Sensitivity with respect to each uncertain element is:                             '
+    '      100% for delta. Increasing delta by 25% decreases the margin by 25%.             '
+
+</pre><h2 id="7">4.g</h2><p>G is the sensitivity function of the negative feedback system of P,C</p><pre class="codeinput">P = tf(1,[1 -1]);
+C = tf([5.8 9],[0.04 1 0]);
+G_new = P*C/(1+P*C);
+</pre><h2 id="8">4.h</h2><pre class="codeinput">[Inf_norm, freq] = norm(G_new, inf, normTol);
+M = freqresp(G_new, freq);
+[U,S,V] = svd(M);
+deltamin = -1/S(1,1)*V(:,1)*U(:,1)';
+fprintf(<span class="string">'norm of delta\n'</span>)
+disp(norm(deltamin))
+fprintf(<span class="string">'norm of delta calculated by small gain thm\n'</span>)
+disp(1/Inf_norm)
+P_tilde = P*(1+deltamin);
+pole(feedback(P_tilde, C))
+</pre><pre class="codeoutput">norm of delta
+    0.6802
+
+norm of delta calculated by small gain thm
+    0.6802
+
+
+ans =
+
+ -22.9601 - 1.7435i
+  -0.0000 + 2.9391i
+  -1.0399 - 1.1956i
+
+</pre><h2 id="9">4.i</h2><pre class="codeinput">deltanew = ultidyn(<span class="string">'delta'</span>, [1 1], <span class="string">'Bound'</span>, norm(deltamin));
+uncertainSys = feedback((P*(1+deltanew)),C);
+[stabmarg,destabunc,report] = robuststab(uncertainSys)
+<span class="comment">% By refering to the output in stabmarg and destabunc, the</span>
+<span class="comment">% system is marginally unstable, which meets the result found in 4.h</span>
+</pre><pre class="codeoutput">
+stabmarg = 
+
+  struct with fields:
+
+                LowerBound: 1.0000
+                UpperBound: 1.0000
+    DestabilizingFrequency: 2.9326
+
+
+destabunc = 
+
+  struct with fields:
+
+    delta: [1&times;1 ss]
+
+
+report =
+
+  6&times;87 char array
+
+    'System is robustly stable for the modeled uncertainty.                                 '
+    ' -- It can tolerate up to 100% of the modeled uncertainty.                             '
+    ' -- There is a destabilizing perturbation amounting to 100% of the modeled uncertainty.'
+    ' -- This perturbation causes an instability at the frequency 2.93 rad/seconds.         '
+    ' -- Sensitivity with respect to each uncertain element is:                             '
+    '      100% for delta. Increasing delta by 25% decreases the margin by 25%.             '
+
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% q.4
+
+%% 4.a
+P = tf(1,[1,-1]);
+C = tf([5.8 9],[0.04 1 0]);
+isstable(feedback(P,C))
+
+%% 4.b
+G = -C/(1+P*C);
+
+%% 4.c
+normTol = 0.001;
+fprintf('The smallest absolute value of Delta calculated by the small gain thm\n')
+[InfNorm,freq] = norm(G,inf,normTol);
+bound = 1/InfNorm
+%verification: to get the smallest delta
+M = freqresp(G,freq);
+[U,S,V]=svd(M);
+deltamin = -1/S(1,1)*V(:,1)*U(:,1)';
+pole(feedback(P-deltamin,C))
+%one pure imaginary pool appear at this critical value 
+
+%% 4.d
+% We see that it can tolerate up to 100% of the modeled uncertainty, the
+% results found here is eactly as we have seen in 4.c
+deltamin = ucomplex('delta',0,'Radius',0.1454);
+%we use the smallest value found in 4.c
+[stabmarg,destabunc,report] = robuststab(feedback(P+deltamin,C))
+
+%% 4.e
+deltamin = -1/S(1,1)*V(:,1)*U(:,1)';
+deltanew = cnum2sys(deltamin,freq);
+pole(feedback(P+deltanew, C))
+%We can see clearly that there are two poles on the imaginary
+% axis, thus the dynamic system generated in 4.e is unstable.
+
+%% 4.f
+deltanew = ultidyn('delta', [1 1], 'Bound', norm(deltamin));
+[stabmarg,destabunc,report] = robuststab(feedback(P+deltanew,C))
+
+%% 4.g
+% G is the sensitivity function of the negative feedback system of P,C
+P = tf(1,[1 -1]);
+C = tf([5.8 9],[0.04 1 0]);
+G_new = P*C/(1+P*C);
+
+%% 4.h
+[Inf_norm, freq] = norm(G_new, inf, normTol);
+M = freqresp(G_new, freq);
+[U,S,V] = svd(M);
+deltamin = -1/S(1,1)*V(:,1)*U(:,1)';
+fprintf('norm of delta\n')
+disp(norm(deltamin))
+fprintf('norm of delta calculated by small gain thm\n')
+disp(1/Inf_norm)
+P_tilde = P*(1+deltamin);
+pole(feedback(P_tilde, C))
+
+%% 4.i
+deltanew = ultidyn('delta', [1 1], 'Bound', norm(deltamin));
+uncertainSys = feedback((P*(1+deltanew)),C);
+[stabmarg,destabunc,report] = robuststab(uncertainSys)
+% By refering to the output in stabmarg and destabunc, the
+% system is marginally unstable, which meets the result found in 4.h
+##### SOURCE END #####
+--></body></html>
