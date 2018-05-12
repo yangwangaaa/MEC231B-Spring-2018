@@ -42,7 +42,7 @@ deltanew = ultidyn('delta', [1 1], 'Bound', norm(deltamin));
 % G is the sensitivity function of the negative feedback system of P,C
 P = tf(1,[1 -1]);
 C = tf([5.8 9],[0.04 1 0]);
-G_new = P*C/(1+P*C);
+G_new = -P*C/(1+P*C);
 
 %% 4.h
 [Inf_norm, freq] = norm(G_new, inf, normTol);
@@ -53,12 +53,12 @@ fprintf('norm of delta\n')
 disp(norm(deltamin))
 fprintf('norm of delta calculated by small gain thm\n')
 disp(1/Inf_norm)
-P_tilde = P*(1+deltamin);
+P_tilde = P*(1-deltamin);
 pole(feedback(P_tilde, C))
 
 %% 4.i
 deltanew = ultidyn('delta', [1 1], 'Bound', norm(deltamin));
-uncertainSys = feedback((P*(1+deltanew)),C);
+uncertainSys = feedback((P*(1-deltanew)),C);
 [stabmarg,destabunc,report] = robuststab(uncertainSys)
 % By refering to the output in stabmarg and destabunc, the
 % system is marginally unstable, which meets the result found in 4.h

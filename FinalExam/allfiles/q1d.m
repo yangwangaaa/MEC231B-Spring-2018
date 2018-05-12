@@ -52,7 +52,7 @@ for j=1:length(obs)
     obs{j}.poly=obs{j}.T*unitbox(2)+obs{j}.center;
     [AA{j},bb{j}]=double(obs{j}.poly);
     lambda{j} = sdpvar(size(AA{j},1),N,'full');
-    s{j} = sdpvar(size(bb{j},1),N,'full');
+    s{j} = sdpvar(N);
 end
 
 %% Setup the Navigation Problem
@@ -73,7 +73,7 @@ for k = 1:N
           model.z.min <= z(:,k+1),z(:,k+1)<=model.z.max];
     cost = cost + (u(2,k)*u(1,k))^2;
     for p = 1:SampleNum-1
-        for q = 1:size(obs,2)
+        for q = 1:length(obs)
             zs = z(:,k)+p/SampleNum*(z(:,k+1)-z(:,k));
             A = AA{q}; b = bb{q};
             constr = constr + [(AA{q}*zs(1:2)-bb{q})'*lambda{q}(:,k) >= -s{q}(k)];
@@ -95,6 +95,7 @@ figure
 plot(zdata(1,:),zdata(2,:),'r')
 hold on
 car_plot(double(u),z0)
+
 %% Plot obstacles
 for j=1:length(obs)
 plot(polytope(AA{j},bb{j}));
