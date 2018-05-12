@@ -75,8 +75,8 @@ for k = 1:N
         for q = 1:size(obs,2)
             zs = z(:,k)+p/SampleNum*(z(:,k+1)-z(:,k));
             A = AA{q}; b = bb{q};
-            constr = constr + [(AA{q}*zs(1:2)-bb{q})'*lambda{q}(:,k) > 0];
-            constr = constr + [lambda{q}(:,k)'*AA{q}*AA{q}'*lambda{q}(:,k)<=1];
+            constr = constr + [(AA{q}*zs(1:2)-bb{q})'*lambda{q}(:,k) >= 0];
+            constr = constr + [lambda{q}(:,k)'*AA{q}*AA{q}'*lambda{q}(:,k) <= 1];
             constr = constr + [lambda{q}(:,k) >= 0];
         end
     end

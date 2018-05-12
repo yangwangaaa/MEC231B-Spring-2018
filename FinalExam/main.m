@@ -65,8 +65,8 @@ for j=1:length(obs)
 end
 
 %% Setup the Navigation Problem
-%options = sdpsettings('solver','ipopt');
-options = sdpsettings('solver','fmincon','verbose',1);
+options = sdpsettings('solver','ipopt');
+%options = sdpsettings('solver','fmincon','verbose',1);
 
 z = sdpvar(3,N+1);
 u = sdpvar(2,N);
@@ -85,7 +85,7 @@ for k = 1:N
         for q = 1:size(obs,2)
             zs = z(:,k)+p/SampleNum*(z(:,k+1)-z(:,k));
             A = AA{q}; b = bb{q};
-            constr = constr + [(AA{q}*zs(1:2)-bb{q})'*lambda{q}(:,k) > 0];
+            constr = constr + [(AA{q}*zs(1:2)-bb{q})'*lambda{q}(:,k) >= 0];
             constr = constr + [lambda{q}(:,k)'*AA{q}*AA{q}'*lambda{q}(:,k)<=1];
             constr = constr + [lambda{q}(:,k) >= 0];
         end
@@ -185,7 +185,7 @@ for k = 1:N
         for q = 1:size(obs,2)
             zs = z(:,k)+p/SampleNum*(z(:,k+1)-z(:,k));
             A = AA{q}; b = bb{q};
-            constr = constr + [(AA{q}*zs(1:2)-bb{q})'*lambda{q}(:,k) > 0];
+            constr = constr + [(AA{q}*zs(1:2)-bb{q})'*lambda{q}(:,k) >= 0];
             constr = constr + [lambda{q}(:,k)'*AA{q}*AA{q}'*lambda{q}(:,k)<=1];
             constr = constr + [lambda{q}(:,k) >= 0];
         end
@@ -262,7 +262,7 @@ for j=1:length(obs)
     obs{j}.poly=obs{j}.T*unitbox(2)+obs{j}.center;
     [AA{j},bb{j}]=double(obs{j}.poly);
     lambda{j} = sdpvar(size(AA{j},1),N,'full');
-    s{j} = sdpvar(size(bb{j},1),N,'full');
+    s{j} = sdpvar(N,'full');
 end
 
 %% Setup the Navigation Problem
@@ -392,7 +392,7 @@ for k = 1:N
         for q = 1:size(obs,2)
             zs = z(:,k)+p/SampleNum*(z(:,k+1)-z(:,k));
             A = AA{q}; b = bb{q};
-            constr = constr + [(AA{q}*zs(1:2)-bb{q})'*lambda{q}(:,k) > 0];
+            constr = constr + [(AA{q}*zs(1:2)-bb{q})'*lambda{q}(:,k) >= 0];
             constr = constr + [lambda{q}(:,k)'*AA{q}*AA{q}'*lambda{q}(:,k)<=1];
             constr = constr + [lambda{q}(:,k) >= 0];
         end
