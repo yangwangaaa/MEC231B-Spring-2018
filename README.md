@@ -13,5 +13,5 @@ Some Robust Control Examples
 ## Kalman Filter Homework
 Basic KF and EKF understanding
 
-## Final Exam
+## Midterm 1 and 2
 Personal solutions about robust control and navigation problems respectively.
