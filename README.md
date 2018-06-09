@@ -12,7 +12,7 @@ Some Robust Control Examples
 
 ## Lab5
 Kalman filter and Extended kalman filter applied to bicycle vehicle model
-- Three Scenarios Simulation: `Lab5/p1`
+- Three basic scenarios simulations: `Lab5/p1`
 - Nonlinear Dynamics based on Euler model: `Lab5/p2`
 - Linearization for EKF: `Lab5/p3`
 - KF Implementation: `Lab5/p4`
@@ -24,7 +24,7 @@ Path planning material, including RRT and Dynamic Optimization
 - Standard RRT (with obstacles): `Lab6/q2`
 - Standard RRT with Vehicle Kinetic Model (no obstacles): `Lab6/q3`
 - Standard RRT with Vehicle Kinetic Model (with obstacles): `Lab6/q4`
-- Navigation problem formulated as nonlinear programming(question 7) or mixed integer quadratic programming (question 8): `Lab6/q7q8`
+- Navigation problem formulated as nonlinear programming (question 7) or mixed integer quadratic programming (question 8): `Lab6/q7q8`
 
 ## Midterm 2
 Robust Analysis and Extended Kalman Filter, personal answers are in the `Midterm2/allfiles/`
