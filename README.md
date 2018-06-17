@@ -1,6 +1,9 @@
 # MEC231B
 Experiential Advanced Control Design II (Spring 2018)
 
+## Drone Dynamics and Control
+Refer to my another github folder: [Parrot Spider Development Lab Work](https://github.com/Junzeng-x14/RollingSpider)
+
 ## Midterm 1
 Basic drone dynamics questions and Kalman Filter knowledge
 
