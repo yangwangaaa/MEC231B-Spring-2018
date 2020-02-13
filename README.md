@@ -1,4 +1,4 @@
-# MEC231B
+# MEC231B-Spring-2018
 Experiential Advanced Control Design II (Spring 2018)
 
 ## Drone Dynamics and Control
